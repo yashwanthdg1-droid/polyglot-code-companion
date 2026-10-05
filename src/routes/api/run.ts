@@ -35,7 +35,7 @@ export const Route = createFileRoute("/api/run")({
             body: JSON.stringify({ language_id: languageId, source_code: b64e(code), stdin: b64e(stdin) }),
           },
         );
-        const j = (await res.json().catch(() => ({}))) as Record<string, any>;
+        const j = (await res.json().catch(() => ({}))) as any;
         if (!res.ok) {
           return Response.json({ error: j.message || j.error || `Runner error (${res.status})` }, { status: res.status });
         }
