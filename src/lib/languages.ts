@@ -2,7 +2,7 @@ export type Lang = { id: number; key: string; name: string; template: string };
 
 // Judge0 CE language IDs
 export const LANGUAGES: Lang[] = [
-  { id: 71, key: "python", name: "Python 3", template: 'name = input() if False else "World"\nprint(f"Hello, {name}!")\n' },
+  { id: 71, key: "python", name: "Python 3", template: 'print("Hello, World!")\n' },
   { id: 63, key: "javascript", name: "JavaScript (Node)", template: 'console.log("Hello, World!");\n' },
   { id: 74, key: "typescript", name: "TypeScript", template: 'const greet = (n: string): string => `Hello, ${n}!`;\nconsole.log(greet("World"));\n' },
   { id: 54, key: "cpp", name: "C++ (GCC)", template: '#include <iostream>\nint main() {\n  std::cout << "Hello, World!" << std::endl;\n  return 0;\n}\n' },
