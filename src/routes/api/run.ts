@@ -19,7 +19,7 @@ export const Route = createFileRoute("/api/run")({
     handlers: {
       POST: async ({ request }) => {
         const key = process.env["JUDGE0_API_KEY"];
-        if (!key) return Response.json({ error: "Code runner key is not configured yet." }, { status: 500 });
+        if (!key) return Response.json({ error: "Running code needs a Judge0 key, which has not been added yet. The AI buttons work without it.", status: "Not set up" });
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid request" }, { status: 400 });
         const { languageId, code, stdin } = parsed.data;
