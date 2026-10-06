@@ -15,33 +15,28 @@ const b64d = (s?: string | null) => {
   return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
 };
 
-// Judge0 language id -> Piston language name
-const PISTON_LANG: Record<string, string> = {
-  python: "python",
-  javascript: "javascript",
-  typescript: "typescript",
-  cpp: "c++",
-  c: "c",
-  java: "java",
-  csharp: "csharp",
-  go: "go",
-  rust: "rust",
-  kotlin: "kotlin",
-  swift: "swift",
-  ruby: "ruby",
-  php: "php",
-  scala: "scala",
+// Judge0 language key -> Wandbox compiler (languages Wandbox supports)
+const WANDBOX_COMPILER: Record<string, string> = {
+  python: "cpython-3.14.0",
+  javascript: "nodejs-20.17.0",
+  typescript: "typescript-5.6.2",
+  c: "gcc-13.2.0-c",
+  cpp: "gcc-13.2.0",
+  csharp: "dotnetcore-8.0.402",
+  java: "openjdk-jdk-21+35",
+  go: "go-1.23.2",
+  rust: "rust-1.82.0",
+  swift: "swift-6.0.1",
+  ruby: "ruby-3.4.9",
+  php: "php-8.3.12",
+  scala: "scala-3.5.1",
   bash: "bash",
-  sql: "sqlite3",
-  r: "rscript",
-  lua: "lua",
-  perl: "perl",
-  haskell: "haskell",
-  dart: "dart",
-  fsharp: "fsi",
-  elixir: "elixir",
-  fortran: "fortran",
-  asm: "nasm",
+  sql: "sqlite-3.46.1",
+  r: "r-4.4.1",
+  lua: "lua-5.4.7",
+  perl: "perl-5.44.0",
+  haskell: "ghc-9.10.1",
+  elixir: "elixir-1.17.3",
 };
 
 type RunResult = {
