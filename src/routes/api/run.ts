@@ -95,16 +95,17 @@ async function runOnWandbox(code: string, stdin: string, compiler: string): Prom
   const j = (await res.json().catch(() => ({}))) as any;
   if (!res.ok) throw new Error(j.message || `Runner error (${res.status})`);
   const compileOut = [j.compiler_output, j.compiler_error].filter(Boolean).join("\n");
-  const status = j.signal
-    ? `Killed (signal ${j.signal})`
-    : j.status && j.status !== 0
-      ? `Exit code ${j.status}`
-      : "Accepted";
+  const exit = Number(j.status ?? 0);
+  const status = j.signal ? `Killed (signal ${j.signal})` : exit === 0 ? "Accepted" : `Exit code ${exit}`;
+  const stdout = j.program_output ?? "";
+  const stderr = j.program_error ?? "";
+  // program_message repeats the output; only surface it when stdout/stderr are empty (e.g. compile failure)
+  const message = status !== "Accepted" && !stdout && !stderr ? (j.program_message ?? "") : "";
   return {
-    stdout: j.program_output ?? "",
-    stderr: j.program_error ?? "",
+    stdout,
+    stderr,
     compileOutput: compileOut,
-    message: j.program_message ?? "",
+    message,
     status,
     provider: "wandbox",
   };
