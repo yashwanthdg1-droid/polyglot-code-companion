@@ -78,39 +78,35 @@ async function runOnJudge0(languageId: number, code: string, stdin: string, key?
   };
 }
 
-async function runOnPiston(code: string, stdin: string, pistonLang: string): Promise<RunResult> {
-  const res = await fetch("https://emkc.org/api/v2/piston/execute", {
+async function runOnWandbox(code: string, stdin: string, compiler: string): Promise<RunResult> {
+  const res = await fetch("https://wandbox.org/api/compile.json", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      language: pistonLang,
-      version: "*",
-      files: [{ content: code }],
+      code,
+      compiler,
       stdin,
-      compile_timeout: 10000,
-      run_timeout: 10000,
+      options: "",
+      "compiler-option-raw": [],
+      "runtime-option-raw": [],
+      save: false,
     }),
   });
   const j = (await res.json().catch(() => ({}))) as any;
-  if (res.status === 429) throw new Error("Free runner is busy — try again in a moment.");
   if (!res.ok) throw new Error(j.message || `Runner error (${res.status})`);
-  const run = j.run ?? {};
-  const compile = j.compile;
-  const compileFailed = compile && compile.code !== 0;
-  const status = compileFailed
-    ? "Compilation Error"
-    : run.code === 0
-      ? "Accepted"
-      : run.signal
-        ? `Killed (signal ${run.signal})`
-        : `Exit code ${run.code}`;
+  const compileOut = [j.compiler_output, j.compiler_error].filter(Boolean).join("\n");
+  const status = j.signal
+    ? `Killed (signal ${j.signal})`
+    : j.status && j.status !== 0
+      ? `Exit code ${j.status}`
+      : "Accepted";
   return {
-    stdout: run.stdout ?? "",
-    stderr: run.stderr ?? "",
-    compileOutput: compile ? (compile.stderr || compile.output || "") : "",
-    message: j.message ?? "",
+    stdout: j.program_output ?? "",
+    stderr: j.program_error ?? "",
+    compileOutput: compileOut,
+    message: j.program_message ?? "",
     status,
-    provider: "piston",
+    provider: "wandbox",
   };
 }
 
