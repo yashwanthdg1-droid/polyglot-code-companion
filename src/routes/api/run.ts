@@ -87,8 +87,8 @@ async function runOnWandbox(code: string, stdin: string, compiler: string): Prom
       compiler,
       stdin,
       options: "",
-      "compiler-option-raw": [],
-      "runtime-option-raw": [],
+      "compiler-option-raw": "",
+      "runtime-option-raw": "",
       save: false,
     }),
   });
