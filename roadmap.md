@@ -1,0 +1,1 @@
+- Judge0 key: add_secret form failed for user; add in-app Settings box to paste key, store securely server-side
