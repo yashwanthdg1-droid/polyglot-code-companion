@@ -123,7 +123,8 @@ export const Route = createFileRoute("/api/run")({
         const providers: Array<() => Promise<RunResult>> = [];
         const key = process.env["JUDGE0_API_KEY"];
         if (key) providers.push(() => runOnJudge0(languageId, code, stdin, key));
-        if (lang && WANDBOX_COMPILER[lang.key]) providers.push(() => runOnWandbox(code, stdin, WANDBOX_COMPILER[lang.key]));
+        const wandbox = lang ? WANDBOX_COMPILER[lang.key] : undefined;
+        if (wandbox) providers.push(() => runOnWandbox(code, stdin, wandbox));
         providers.push(() => runOnJudge0(languageId, code, stdin));
 
         const errors: string[] = [];
