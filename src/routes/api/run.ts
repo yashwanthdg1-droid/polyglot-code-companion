@@ -19,22 +19,29 @@ export const Route = createFileRoute("/api/run")({
     handlers: {
       POST: async ({ request }) => {
         const key = process.env["JUDGE0_API_KEY"];
-        if (!key) return Response.json({ error: "Running code needs a Judge0 key, which has not been added yet. The AI buttons work without it.", status: "Not set up" });
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return Response.json({ error: "Invalid request" }, { status: 400 });
         const { languageId, code, stdin } = parsed.data;
-        const res = await fetch(
-          "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=true&fields=*",
-          {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              "x-rapidapi-key": key,
-              "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-            },
-            body: JSON.stringify({ language_id: languageId, source_code: b64e(code), stdin: b64e(stdin) }),
-          },
-        );
+        const body = JSON.stringify({ language_id: languageId, source_code: b64e(code), stdin: b64e(stdin) });
+        // Prefer the user's RapidAPI key (higher limits); fall back to the free public endpoint.
+        const res = key
+          ? await fetch(
+              "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=true&fields=*",
+              {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                  "x-rapidapi-key": key,
+                  "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
+                },
+                body,
+              },
+            )
+          : await fetch("https://ce.judge0.com/submissions?base64_encoded=true&wait=true", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body,
+            });
         const j = (await res.json().catch(() => ({}))) as any;
         if (!res.ok) {
           return Response.json({ error: j.message || j.error || `Runner error (${res.status})` }, { status: res.status });
