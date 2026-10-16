@@ -23,7 +23,7 @@ type RunResult = { stdout?: string; stderr?: string; compileOutput?: string; mes
 type Mode = "fix" | "optimize" | "explain" | "write";
 
 function makeWebPreview(language: string, code: string) {
-  if (language === "html") return code;
+  if (language === "html" || language === "web") return code;
   const safeCss = code.replace(/<\/style/gi, "<\\/style");
   return `<!doctype html>
 <html lang="en">
