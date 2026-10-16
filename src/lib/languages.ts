@@ -2,6 +2,28 @@ export type Lang = { id: number; key: string; name: string; template: string };
 
 // Judge0 CE language IDs
 export const LANGUAGES: Lang[] = [
+  { id: 1003, key: "web", name: "Web (HTML/CSS/JS)", template: `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My web app</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; color: #172033; }
+    button { padding: 0.6rem 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Hello, World!</h1>
+  <button id="greet">Click me</button>
+  <script>
+    document.querySelector("#greet").addEventListener("click", () => {
+      document.querySelector("h1").textContent = "JavaScript is working!";
+    });
+  </script>
+</body>
+</html>
+` },
   { id: 1001, key: "html", name: "HTML", template: '<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My page</title>\n</head>\n<body>\n  <h1>Hello, World!</h1>\n  <p>Edit this HTML and press Run to preview it.</p>\n</body>\n</html>\n' },
   { id: 1002, key: "css", name: "CSS", template: 'body {\n  margin: 0;\n  min-height: 100vh;\n  display: grid;\n  place-items: center;\n  background: #f1f5f9;\n  color: #172033;\n  font-family: system-ui, sans-serif;\n}\n\nh1 { color: #d97706; }\n' },
   { id: 71, key: "python", name: "Python 3", template: 'print("Hello, World!")\n' },
