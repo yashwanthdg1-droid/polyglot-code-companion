@@ -132,7 +132,7 @@ function Index() {
     return m?.[1];
   })();
 
-  const ok = result?.status === "Accepted";
+  const ok = result?.status === "Accepted" || result?.status === "Preview ready";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
