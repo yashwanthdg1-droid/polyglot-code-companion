@@ -23,7 +23,7 @@ type RunResult = { stdout?: string; stderr?: string; compileOutput?: string; mes
 type Mode = "fix" | "optimize" | "explain" | "write";
 
 function makeWebPreview(language: string, code: string) {
-  if (language === "html") return code;
+  if (language === "html" || language === "web") return code;
   const safeCss = code.replace(/<\/style/gi, "<\\/style");
   return `<!doctype html>
 <html lang="en">
@@ -70,7 +70,7 @@ function Index() {
     setRunning(true);
     setTab("output");
     setResult(null);
-    if (langKey === "html" || langKey === "css") {
+    if (langKey === "html" || langKey === "css" || langKey === "web") {
       setWebPreview(makeWebPreview(langKey, code));
       setResult({ status: "Preview ready" });
       setRunning(false);
@@ -232,7 +232,7 @@ function Index() {
             {tab === "output" ? (
               running ? (
                 <p className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Running…</p>
-              ) : (langKey === "html" || langKey === "css") && webPreview ? (
+              ) : (langKey === "html" || langKey === "css" || langKey === "web") && webPreview ? (
                 <iframe
                   title={`${lang.name} preview`}
                   srcDoc={webPreview}
