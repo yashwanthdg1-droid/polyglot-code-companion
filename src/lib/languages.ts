@@ -2,8 +2,10 @@ export type Lang = { id: number; key: string; name: string; template: string };
 
 // Judge0 CE language IDs
 export const LANGUAGES: Lang[] = [
+  { id: 1001, key: "html", name: "HTML", template: '<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My page</title>\n</head>\n<body>\n  <h1>Hello, World!</h1>\n  <p>Edit this HTML and press Run to preview it.</p>\n</body>\n</html>\n' },
+  { id: 1002, key: "css", name: "CSS", template: 'body {\n  margin: 0;\n  min-height: 100vh;\n  display: grid;\n  place-items: center;\n  background: #f1f5f9;\n  color: #172033;\n  font-family: system-ui, sans-serif;\n}\n\nh1 { color: #d97706; }\n' },
   { id: 71, key: "python", name: "Python 3", template: 'print("Hello, World!")\n' },
-  { id: 63, key: "javascript", name: "JavaScript (Node)", template: 'console.log("Hello, World!");\n' },
+  { id: 63, key: "javascript", name: "JavaScript", template: 'console.log("Hello, World!");\n' },
   { id: 74, key: "typescript", name: "TypeScript", template: 'const greet = (n: string): string => `Hello, ${n}!`;\nconsole.log(greet("World"));\n' },
   { id: 54, key: "cpp", name: "C++ (GCC)", template: '#include <iostream>\nint main() {\n  std::cout << "Hello, World!" << std::endl;\n  return 0;\n}\n' },
   { id: 50, key: "c", name: "C (GCC)", template: '#include <stdio.h>\nint main() {\n  printf("Hello, World!\\n");\n  return 0;\n}\n' },

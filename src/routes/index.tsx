@@ -22,6 +22,16 @@ export const Route = createFileRoute("/")({
 type RunResult = { stdout?: string; stderr?: string; compileOutput?: string; message?: string; status?: string; time?: string; memory?: number; error?: string };
 type Mode = "fix" | "optimize" | "explain" | "write";
 
+function makeWebPreview(language: string, code: string) {
+  if (language === "html") return code;
+  const safeCss = code.replace(/<\/style/gi, "<\\/style");
+  return `<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>${safeCss}</style></head>
+<body><main class="preview"><p class="eyebrow">CSS PREVIEW</p><h1>Style this page</h1><p>Edit the CSS to change colors, spacing, and typography.</p><button>Example button</button></main></body>
+</html>`;
+}
+
 function Index() {
   const [langKey, setLangKey] = useState("python");
   const lang = LANGUAGES.find((l) => l.key === langKey)!;
@@ -31,6 +41,7 @@ function Index() {
   const [stdin, setStdin] = useState("");
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<RunResult | null>(null);
+  const [webPreview, setWebPreview] = useState<string | null>(null);
   const [ai, setAi] = useState("");
   const [aiBusy, setAiBusy] = useState<Mode | null>(null);
   const [prompt, setPrompt] = useState("");
@@ -59,6 +70,13 @@ function Index() {
     setRunning(true);
     setTab("output");
     setResult(null);
+    if (langKey === "html" || langKey === "css") {
+      setWebPreview(makeWebPreview(langKey, code));
+      setResult({ status: "Preview ready" });
+      setRunning(false);
+      return;
+    }
+    setWebPreview(null);
     try {
       const r = await fetch("/api/run", {
         method: "POST",
@@ -214,6 +232,13 @@ function Index() {
             {tab === "output" ? (
               running ? (
                 <p className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Running…</p>
+              ) : (langKey === "html" || langKey === "css") && webPreview ? (
+                <iframe
+                  title={`${lang.name} preview`}
+                  srcDoc={webPreview}
+                  sandbox="allow-scripts"
+                  className="h-[55vh] min-h-[320px] w-full border-0 bg-background"
+                />
               ) : result ? (
                 <pre className={`whitespace-pre-wrap text-sm ${ok ? "" : "text-destructive"}`}>{outputText || "(no output)"}</pre>
               ) : (
